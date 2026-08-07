@@ -1,0 +1,17 @@
+{
+    "name": "com.latios.containers-extract",
+    "displayName": "Latios Containers (extract)",
+    "version": "0.16.0-extract.1",
+    "unity": "6000.3",
+    "description": "Entities-independent container and allocator types extracted from Latios Framework Core, usable on Entities 6.x where the full framework cannot build. Not an official Latios Framework package.",
+    "keywords": [
+        "dots",
+        "collections",
+        "allocator"
+    ],
+    "dependencies": {
+        "com.unity.collections": "2.5.1",
+        "com.unity.burst": "1.8.19",
+        "com.unity.mathematics": "1.3.2"
+    }
+}
