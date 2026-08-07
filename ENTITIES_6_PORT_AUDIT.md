@@ -97,20 +97,30 @@ These still *work* in 6.5 (deprecated, not removed), so they are warnings rather
 than errors — but `IManagedComponent` is a public framework feature whose backing
 storage is on a removal path. Worth deciding early whether to keep it.
 
-### 2.4 Open question: does the `.asmref` trick still work?
+### 2.4 Entities is a core package — the version cannot be pinned
 
-Unity: *"The Entities, Collections, Mathematics, and Entities Graphics packages are
-coming to Unity 6.4 as Core Packages … they will ship with the Editor."*
+Entities now ships *with* the editor and is versioned *as* the editor. There is no
+way to upgrade or downgrade it independently. The only lever on the Entities
+version is the Unity version itself.
 
-`.asmref` injection requires the target assembly to be compiled *from source* in
-the project. If core packages ship as precompiled DLLs, `EntitiesExposed` cannot
-be injected at all and the entire approach collapses — the port would then require
-reflection or a fork of Entities itself.
+Two consequences, and the second is the important one:
 
-**This must be checked first, before any porting work.** Verify whether
-`com.unity.entities@6.5.0` in `Library/PackageCache` contains `.cs` sources and an
-`.asmdef`, or a prebuilt `Unity.Entities.dll`. Everything below is moot if it's
-the latter.
+**No escape hatch.** You cannot pin Entities 1.4.8 under Unity 6000.7 to get the
+framework building. Running Latios 0.16 as shipped would mean moving the whole
+project back to Unity 6000.3 — giving up Netcode 6.7, Collections 6.5, Burst 2.0,
+and the dedicated-server 3.0 stack.
+
+**A port is a recurring tax, not a one-time cost.** `EntitiesExposed` is pinned to
+private fields and internal layout. Those carry no compatibility guarantee and can
+shift on any editor update — and the version cannot be held back while the port
+catches up. Every Unity upgrade becomes a re-verification of pointer-level code,
+where the failure mode is memory corruption rather than a build error. This project
+is on **6000.7.0a3, an alpha**, so that internal layout is actively churning.
+
+Also unresolved: `.asmref` injection requires the target assembly to be compiled
+*from source*. Worth confirming that `com.unity.entities@6.5.0` ships `.cs` sources
+and an `.asmdef` rather than a prebuilt `Unity.Entities.dll` — if it's the latter,
+the approach cannot work at all.
 
 ---
 
@@ -133,7 +143,22 @@ Latios — the framework already ships its own `Core/Framework/IAspect.cs` and t
 
 ---
 
-## 4. Recommended scope
+## 4. Recommendation
+
+**Don't port. Take the extract, and wait for upstream.**
+
+Given §2.4, a private port of `EntitiesExposed` would need re-verifying against
+private Entities internals on every editor update, with no ability to hold the
+version back, on an alpha editor. That is a standing maintenance cost on the most
+dangerous code in the project, paid indefinitely, to get features that upstream
+will eventually ship for free — Entity Store V2 support is on their roadmap, and
+they have already begun marking the V1-dependent paths obsolete.
+
+[`LatiosContainers/`](LatiosContainers/) takes the part that has none of this
+exposure: the containers and allocators that never touch `Unity.Entities`. For a
+voxel project that is most of the practical value anyway (see §5).
+
+### If you port anyway
 
 **Do `Latios.Core`. Defer `Latios.Transforms`.**
 
