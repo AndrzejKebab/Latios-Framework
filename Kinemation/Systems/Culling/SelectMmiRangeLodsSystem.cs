@@ -28,7 +28,7 @@ namespace Latios.Kinemation.Systems
         {
             var api = this.OnCreateForLatios(ref state);
 
-            m_query = state.Fluent().With<MaterialMeshInfo, LodCrossfade>(false).With<WorldRenderBounds>(true)
+            m_query = state.Fluent().With<MaterialMeshInfo, LodCrossfade>(false).With<WorldRenderBounds>(true).With<ChunkPerCameraCullingMask>(false, true)
                       .WithAnyEnabled<MmiRange2LodSelect, MmiRange3LodSelect, MeshLodCurve>(true).WithWorldTransformReadOnly().Build();
 
             api.worldBlackboardEntity.AddComponentDataIfMissing(new MeshLodCrossfadeMargin { margin = (half)0.05f });
@@ -208,8 +208,8 @@ namespace Latios.Kinemation.Systems
                             mask.ClearBitAtIndex(i);
                         if (lodGroupPercentages == null || !crossfadesEnabled[i])
                             crossfadesEnabled[i] = crossfadeEnabled;
-                        if (enableMeshLodCrossfade)
-                            enableMeshLodCrossfades[i] = true;
+                        if (meshLods != null)
+                            enableMeshLodCrossfades[i] = enableMeshLodCrossfade;
                         if (select2s != null || select3s != null)
                             mmis[i] = mmi;
                     }
