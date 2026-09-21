@@ -10,6 +10,23 @@ You can find changelogs for the individual modules in the [official Latios
 Framework Documentation
 repository](https://github.com/Dreaming381/Latios-Framework-Documentation).
 
+## [0.16.0] – 2026-9-20
+
+Officially supports Entities [1.4.8]
+
+### Changed
+
+-   Updated Core to v0.16.0
+-   Updated Aux ECS to v0.16.0
+-   Updated QVVS Transforms to v0.16.0
+-   Updated Calci to v0.16.0
+-   Updated Psyshock to v0.16.0
+-   Updated Myri to v0.16.0
+-   Updated Kinemation to v0.16.0
+-   Updated Calligraphics to v0.16.0
+-   Updated LifeFX to v0.16.0
+-   Updated Unika to v0.16.0
+
 ## [0.15.12] – 2026-7-25
 
 Officially supports Entities [1.4.8]
